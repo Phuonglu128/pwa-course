@@ -14,3 +14,9 @@ function getEnvironmentFileName(env) {
     }
 }
 module.exports = { getEnvironmentFileName: getEnvironmentFileName };
+
+
+// function getEnviromentFileName(env) {
+//     return "".concat(env, ".json");
+// }
+// // Error because `Duplicate function implementation.`

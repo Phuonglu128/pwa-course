@@ -1,5 +1,5 @@
 export function getEnvironmentFileName(env: string): string {
-  switch(env) {
+  switch (env) {
     case 'dev':
       return 'dev.json';
     case 'staging':
@@ -12,3 +12,9 @@ export function getEnvironmentFileName(env: string): string {
 }
 
 module.exports = { getEnvironmentFileName };
+
+// function getEnviromentFileName(env: string) {
+//     return `${env}.json`;
+// }
+
+// // Error because `Duplicate function implementation.`

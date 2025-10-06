@@ -1,31 +1,53 @@
 import { test, expect } from '@playwright/test';
+import dataDev from './../lesson-01/config/data-dev.json';
+import dataProd from './../lesson-01/config/data-dev.json';
+import { LoginPage } from "../../page/login.page";
+import { DashboardPage } from "../../page/dashboard.page";
 
-test.describe('Dashboard Authentication', () => {
-  let loginLink, usernameInput, passwordInput, loginButton, dashboardLink;
+let data: any;
+let usernameValid: string, passwordValid: string;
+let loginPage: LoginPage;
+let dashboardPage: DashboardPage;
 
-  test.beforeEach(async ({ page, context }) => {
-    loginLink = page.locator('a[href*="/my-account/"]');
-    usernameInput = page.locator('#username');
-    passwordInput = page.locator('#password');
-    loginButton = page.locator('button[class*="login__submit"]');
-    dashboardLink = page.locator('nav[class="woocommerce-MyAccount-navigation"] li[class*="dashboard"]');
+test.beforeEach(async ({ page }) => {
+  await test.step("Prepare data", async () => {
+    data = process.env.ENV === 'prod' ? dataProd : dataDev;
+    usernameValid = process.env.USERNAME || "";
+    passwordValid = process.env.PASSWORD || "";
+    loginPage = new LoginPage(page);
+    dashboardPage = new DashboardPage(page);
+    await loginPage.navigateToLoginPage();
+  });
+});
+
+test.describe("Dashboard Authentication", () => {
+  test("Login thành công", {
+    annotation: {
+      type: 'MODULE_ID',
+      description: 'DB_AUTH'
+    },
+    tag: ['@DB_AUTH_001', '@DB_AUTH', '@UI', '@SMOKE']
+  }, async ({ }) => {
+    await test.step("Đăng nhập với thông tin username, password chính xác", async () => {
+      await dashboardPage.login(usernameValid, passwordValid);
+
+      await expect(dashboardPage.page.locator(dashboardPage.dashboardLink)).toBeVisible;
+    })
   });
 
-  test('DASHBOARD_AUTH_001 - login with valid credentials for dev env', async ({ page }) => {
-    await page.goto(process.env.BASE_URL!);
-    await loginLink.click();
-    await usernameInput.fill(process.env.USERNAME_INPUT!);
-    await passwordInput.fill(process.env.PASSWORD_INPUT!);
-    await loginButton.click();
-    await expect(dashboardLink).toBeVisible({ timeout: 30000 });
-  });
+  test("Login thất bại", {
+    annotation: {
+      type: 'MODULE_ID',
+      description: 'DB_AUTH'
+    },
+    tag: ['@DB_AUTH_002', '@DB_AUTH', '@UI', '@SMOKE']
+  }, async ({ }) => {
+    await test.step("Đăng nhập với thông tin username, password chính xác", async () => {
+      await dashboardPage.login(data.login_page.data.username_invalid, data.login_page.data.password_invalid);
 
-    test('DASHBOARD_AUTH_002 - login with valid credentials for prod env', async ({ page }) => {
-    await page.goto(process.env.BASE_URL!);
-    await loginLink.click();
-    await usernameInput.fill(process.env.USERNAME!);
-    await passwordInput.fill(process.env.PASSWORD!);
-    await loginButton.click();
-    await expect(dashboardLink).toBeVisible({ timeout: 10000 });
-  });
+      await expect(loginPage.page.locator(dashboardPage.locatorError)).toContainText(
+        `Error: The username ${data.login_page.data.username_invalid} is not registered on this site. If you are unsure of your username, try your email address instead.`
+      );
+    })
+  })
 });

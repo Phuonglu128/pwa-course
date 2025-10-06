@@ -1,5 +1,5 @@
 function getEnvironmentFileName(env) {
-  switch(env) {
+  switch (env) {
     case "dev":
       return "dev.json";
     case "staging":
@@ -12,3 +12,8 @@ function getEnvironmentFileName(env) {
 }
 
 module.exports = { getEnvironmentFileName };
+
+
+// function getEnvironmentFileName(env) {
+//     return `${env}.json`;
+// }
