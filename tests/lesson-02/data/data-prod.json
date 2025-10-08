@@ -1,0 +1,12 @@
+{
+    "add_new_product_page": {
+        "data": {
+            "product_name": "[phuonglu] Khoá học Performance testing với K6",
+            "regular_price": "120",
+            "sale_price": "70"
+        },
+        "expected": {
+            "heading": "Dashboard"
+        }
+    }
+}
