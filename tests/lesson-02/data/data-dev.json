@@ -1,0 +1,12 @@
+{
+    "add_new_product_page": {
+        "data": {
+            "product_name": "[phuonglu] Khoá học API Testing với Postman",
+            "regular_price": "100",
+            "sale_price": "80"
+        },
+        "expected": {
+            "heading": "Product published."
+        }
+    }
+}
