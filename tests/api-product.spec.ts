@@ -27,7 +27,7 @@ test('API & DB - Create, Update, Verify and Cleanup Product (PWA102)', async ({ 
   console.log(`Product created: ${productId}`);
 
   // Step 2: Update sản phẩm
-  const updateRes = await request.post(`${baseUrl}/product/update.php`, {
+  const updateRes = await request.put(`${baseUrl}/product/update.php`, {
     data: JSON.stringify({
       id: productId,
       name: 'PWA102 product',
